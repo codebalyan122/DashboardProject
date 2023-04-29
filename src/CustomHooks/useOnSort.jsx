@@ -1,18 +1,21 @@
-const useOnSort = (data) => {
+const useOnSort = (data, type, unit) => {
   const reducedData = data?.reduce((acc, cur) => {
     const found =
       acc?.length &&
       acc.find((d) => {
-        if (d.sector === cur.sector) {
+        const equal =
+          d[type].toString().toLowerCase() ===
+          cur[type].toString().toLowerCase();
+        if (equal) {
           d.count += 1;
-          d.intensity += Number(cur.intensity);
+          d[unit] += Number(cur[unit]);
         }
-        return d.sector === cur.sector;
+        return equal;
       });
     if (!found) {
       acc.push({
-        sector: cur.sector,
-        intensity: Number(cur.intensity),
+        [type]: cur[type],
+        [unit]: Number(cur[unit]),
         count: 1,
       });
     }
@@ -20,8 +23,8 @@ const useOnSort = (data) => {
   }, []);
   const finalData = reducedData?.map((d) => {
     return {
-      sector: d.sector,
-      intensity: (d.intensity /= d.count),
+      [type]: d[type],
+      [unit]: (d[unit] /= d.count),
     };
   });
   return finalData;
