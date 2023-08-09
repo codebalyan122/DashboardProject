@@ -7,11 +7,13 @@ import BubbleChart from "../Components/Charts/BubbleChart/BubbleChart";
 import Filter from "../Components/Filter/Filter";
 
 const Home = () => {
-  const [articleData, setArticleData] = useState();
-  const [filteredData, setFilteredData] = useState();
+  const [articleData, setArticleData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+
   const getArticleData = useCallback(async () => {
     try {
-      const response = await axios.get("http://localhost:3001/api/articles");
+      const response = await axios.get("http://localhost:3001/");
+      console.log(response.data);
       setArticleData(response.data);
       setFilteredData(response.data);
     } catch (err) {
@@ -25,6 +27,8 @@ const Home = () => {
   const handleFilters = (newData) => {
     setFilteredData(newData);
   };
+
+  console.log(articleData, filteredData);
   return (
     <>
       <Filter data={articleData} handleFilters={handleFilters} />

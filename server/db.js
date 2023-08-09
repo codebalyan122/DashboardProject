@@ -1,19 +1,16 @@
-import { MongoClient } from "mongodb";
+import fs from "fs";
+import dashboardData from "./dashboardData.js";
 
-const mongoConnection = async () => {
+const data = JSON.parse(fs.readFileSync("./jsondata.json", "utf-8"));
+const importData = async () => {
   try {
-    const url = "mongodb://0.0.0.0:27017";
-    const client = new MongoClient(url);
-    await client.connect();
-
-    console.log("DB Connected");
-
-    const db = client.db("assignment");
-    const collection = db.collection("articleInsight");
-    return collection;
-  } catch (err) {
-    console.log(err);
+    await dashboardData.create(data);
+    console.log("data successfully imported");
+    // to exit the process
+    process.exit();
+  } catch (error) {
+    console.log("error", error);
   }
 };
 
-export default mongoConnection;
+export default importData;

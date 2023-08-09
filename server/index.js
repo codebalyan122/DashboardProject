@@ -1,15 +1,27 @@
 import express from "express";
-import mongoConnection from "./db.js";
+import importData from "./db.js";
+import dotenv from "dotenv";
+import dashboardData from "./dashboardData.js";
 import cors from "cors";
+import mongoose from "mongoose";
 const port = 3001;
 const app = express();
 
 app.use(express.json());
 app.use(cors());
-app.get("/api/articles", async (req, res) => {
-  const db = await mongoConnection();
+
+dotenv.config({ path: "./.env" });
+
+const mongoURI = process.env.MONGO_DB_URI;
+
+mongoose
+  .connect(mongoURI)
+  .then(() => console.log("db connected"))
+  .catch((err) => console.log(err));
+
+app.get("/", async (req, res) => {
   try {
-    const response = await db.find({}).toArray();
+    const response = await dashboardData.find({});
     res.json(response);
   } catch (err) {
     res.status(500).json("Internal Server Error");
@@ -18,9 +30,8 @@ app.get("/api/articles", async (req, res) => {
 });
 
 app.get("/api/topic-sector", async (req, res) => {
-  const db = await mongoConnection();
   try {
-    const response = await db
+    const response = await dashboardData
       .aggregate([
         {
           $group: {
@@ -31,7 +42,7 @@ app.get("/api/topic-sector", async (req, res) => {
           },
         },
       ])
-      .toArray();
+      .exec();
     res.json(response);
   } catch (err) {
     res.status(500).json("Internal Server Error");
@@ -40,9 +51,8 @@ app.get("/api/topic-sector", async (req, res) => {
 });
 
 app.get("/api/filters", async (req, res) => {
-  const db = await mongoConnection();
   try {
-    const response = await db
+    const response = await dashboardData
       .aggregate([
         {
           $group: {
@@ -57,13 +67,15 @@ app.get("/api/filters", async (req, res) => {
           },
         },
       ])
-      .toArray();
+      .exec();
     res.json(response);
   } catch (err) {
     res.status(500).json("Internal Server Error");
     console.log(err);
   }
 });
+
+// importData();
 
 app.listen(port, () => {
   console.log(`Listening to ${port}`);
