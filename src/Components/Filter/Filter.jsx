@@ -8,7 +8,9 @@ const Filter = (props) => {
   const [toggleOpen, setToggleOpen] = useState(false);
   const [renderFilters, setRenderFilters] = useState();
   const getFilters = useCallback(async () => {
-    const response = await axios.get("http://localhost:3001/api/filters");
+    const response = await axios.get(
+      "https://dashboardnodejs3.onrender.com/api/filters"
+    );
     setFilters(response.data);
   }, []);
 

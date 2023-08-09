@@ -12,7 +12,9 @@ const Home = () => {
 
   const getArticleData = useCallback(async () => {
     try {
-      const response = await axios.get("http://localhost:3001/");
+      const response = await axios.get(
+        "https://dashboardnodejs3.onrender.com/"
+      );
       console.log(response.data);
       setArticleData(response.data);
       setFilteredData(response.data);

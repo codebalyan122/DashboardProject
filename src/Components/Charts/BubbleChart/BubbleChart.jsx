@@ -7,9 +7,12 @@ const BubbleChart = (props) => {
   const [ref, setRef] = useState();
   const [chartData, setChartData] = useState();
   const getArticleData = useCallback(async () => {
-    const response = await axios.get("http://localhost:3001/api/topic-sector", {
-      params: { data: `${props.type}` },
-    });
+    const response = await axios.get(
+      "https://dashboardnodejs3.onrender.com/api/topic-sector",
+      {
+        params: { data: `${props.type}` },
+      }
+    );
     setChartData(response.data);
   }, [setChartData]);
 
