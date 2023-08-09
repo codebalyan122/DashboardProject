@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import dashboardData from "./dashboardData.js";
 import cors from "cors";
 import mongoose from "mongoose";
-const port = 3001;
+const port = process.env.PORT || 3001;
 const app = express();
 
 app.use(express.json());
